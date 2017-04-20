@@ -40,6 +40,8 @@ export const number = validatorFromFunction((value, {minValue, maxValue} = {}) =
 export const regex = validatorFromFunction((value, pattern) => value.match(pattern) !== null)
 
 export default {
+  validatorFromFunction,
+  combine,
   exists,
   length,
   number,
