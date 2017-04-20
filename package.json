@@ -4,12 +4,19 @@
   "description": "",
   "main": "compiled/index.js",
   "scripts": {
-    "compile": "babel --presets es2015 -d lib/ src/",
+    "compile": "babel --presets es2015 -d compiled/ src/",
     "prepublish": "npm run compile",
     "test": "npm run compile && mocha --compilers js:babel-core/register"
   },
   "author": "Manuel Fuchs (malax@malax.de)",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/malax/validate-redux-form.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Malax/validate-redux-form/issues"
+  },
   "devDependencies": {
     "babel-cli": "^6.24.1",
     "babel-core": "^6.24.1",
