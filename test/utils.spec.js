@@ -66,21 +66,21 @@ describe('utils', function () {
 
   describe('array', function () {
     it('should apply the given validation to all elements', function () {
-      const result = array({ foo: () => 'err'})([{}, {}])
+      const result = array({foo: () => 'err'})([{}, {}])
       expect(result).to.be.a('array')
       expect(result).to.have.deep.property('[0].foo', 'err')
       expect(result).to.have.deep.property('[1].foo', 'err')
     })
 
     it('should allow to specify a minimum amount of elements', function () {
-      const result = array({ foo: () => 'err'}, {min: 2})([])
+      const result = array({foo: () => 'err'}, {min: 2})([])
       expect(result).to.be.a('array')
       expect(result).to.have.deep.property('[0].foo', 'err')
       expect(result).to.have.deep.property('[1].foo', 'err')
     })
 
     it('should work when the value is undefined', function () {
-      const result = array({ foo: () => 'err'}, {min: 1})(undefined)
+      const result = array({foo: () => 'err'}, {min: 1})(undefined)
       expect(result).to.have.deep.property('[0].foo', 'err')
     })
   })
