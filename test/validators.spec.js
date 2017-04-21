@@ -53,23 +53,23 @@ describe('Validators', function () {
     })
 
     it('should work with a min number of zero', function () {
-      expect(number({minValue: 0})('nan')('23')).to.equal(null)
-      expect(number({minValue: 0})('nan')('-23')).to.equal('nan')
+      expect(number({min: 0})('nan')('23')).to.equal(null)
+      expect(number({min: 0})('nan')('-23')).to.equal('nan')
     })
 
     it('should work with a max number of zero', function () {
-      expect(number({maxValue: 0})('nan')('23')).to.equal('nan')
-      expect(number({maxValue: 0})('nan')('-23')).to.equal(null)
+      expect(number({max: 0})('nan')('23')).to.equal('nan')
+      expect(number({max: 0})('nan')('-23')).to.equal(null)
     })
 
     it('should work with a max and min number', function () {
-      expect(number({minValue: 0, maxValue: 12})('nan')('23')).to.equal('nan')
-      expect(number({minValue: 0, maxValue: 12})('nan')('-23')).to.equal('nan')
-      expect(number({minValue: 0, maxValue: 12})('nan')('11')).to.equal(null)
+      expect(number({min: 0, max: 12})('nan')('23')).to.equal('nan')
+      expect(number({min: 0, max: 12})('nan')('-23')).to.equal('nan')
+      expect(number({min: 0, max: 12})('nan')('11')).to.equal(null)
     })
 
     it('should report an error for an undefined value', function () {
-      expect(number({minValue: 0, maxValue: 12})('nan')(undefined)).to.equal('nan')
+      expect(number({min: 0, max: 12})('nan')(undefined)).to.equal('nan')
     })
   })
 

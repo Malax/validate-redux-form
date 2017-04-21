@@ -38,10 +38,10 @@ export const length = validatorFromFunction((string, {min, max} = {}) => {
   return hasMinLength && hasMaxLength
 }, true)
 
-export const number = validatorFromFunction((value, {minValue, maxValue} = {}) => {
+export const number = validatorFromFunction((value, {min, max} = {}) => {
   const isNumber = !isNaN(value)
-  const hasMinValue = minValue !== undefined ? parseInt(value) >= minValue : true
-  const hasMaxValue = maxValue !== undefined ? parseInt(value) <= maxValue : true
+  const hasMinValue = min !== undefined ? parseInt(value) >= min : true
+  const hasMaxValue = max !== undefined ? parseInt(value) <= max : true
   return isNumber && hasMinValue && hasMaxValue
 }, true)
 
