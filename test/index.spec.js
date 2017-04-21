@@ -37,7 +37,7 @@ describe('validate-redux-form', function () {
       expect(validate({}, validation)).to.not.have.property('foo')
     })
 
-    it('should omit nesed objects that contain no errors', function () {
+    it('should omit nested objects that contain no errors', function () {
       const validation = {
         foo: {
           bar: (value) => null,
