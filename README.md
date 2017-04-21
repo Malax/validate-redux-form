@@ -95,7 +95,7 @@ or `null` when the validation succeeded. In the previous examples, you saw highe
 created the actual validation functions for you with custom error messages and parameters.
 
 To make it easy to implement your own, *validate-redux-form* ships with the `validatorFromFunction` function. 
-It takes another function `any => boolean` and returns the validator functions for you.
+It takes another function `any => boolean` and builds the validator function for you.
  
 ```javascript
 import { validatorFromFunction } from 'validate-redux-form'
