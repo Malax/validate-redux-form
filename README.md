@@ -1,5 +1,6 @@
 # validate-redux-form
-:warning: This library is under heavy in development! Please, don't use it yet. :wink:
+[![Build Status](https://travis-ci.org/Malax/validate-redux-form.svg?branch=master)](https://travis-ci.org/Malax/validate-redux-form)
+:warning: **This library is under heavy in development! Please, don't use it yet.**
 
 Small helper library to write declarative validations for [redux-form](https://github.com/erikras/redux-form) forms.
 It is designed to be used with redux-form and might not be very well suited to be 
