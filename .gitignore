@@ -3,3 +3,4 @@
 /compiled
 /.nyc_output
 /coverage
+/coverage.lcov
