@@ -3,9 +3,10 @@ import fromPairs from 'lodash.frompairs'
 import isFunction from 'lodash.isfunction'
 import isObject from 'lodash.isobject'
 import isEmpty from 'lodash.isempty'
-import importedValidators from './validators'
+import { array } from './utils'
 
-export const validators = importedValidators
+export { default as validators } from './validators'
+export { array, validatorFromFunction, combine } from './utils'
 
 export function validate (data, validationSpec) {
   const pairs = toPairs(validationSpec)
@@ -15,7 +16,7 @@ export function validate (data, validationSpec) {
     let value = pair[1]
 
     if (Array.isArray(value)) {
-      value = validators.array(value[0])
+      value = array(value[0])
     }
 
     if (isFunction(value)) {

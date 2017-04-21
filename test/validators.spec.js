@@ -1,161 +1,98 @@
 import { expect } from 'chai'
-import { validatorFromFunction, combine, exists, length, number, regex, array, equals } from '../src/validators'
+import { validators } from '../src/index'
 
-describe('Validators', function () {
-  describe('validatorFromFunction', function () {
-    const validator = validatorFromFunction(value => value > 23)
-
-    it('should return a correct validator function', function () {
-      expect(validator).to.be.a('function')
-      expect(validator()).to.be.a('function')
-      expect(validator()('failed')).to.be.a('function')
-    })
-
-    it('should return the error when the given function returns false', function () {
-      expect(validator()('failed')(10)).to.equal('failed')
-    })
-
-    it('should return null when the given function returns true', function () {
-      expect(validator()('failed')(42)).to.equal(null)
-    })
-
-    it('should pass a parameter to the function', function () {
-      const validatorWithParam = validatorFromFunction((value, param) => value > param)
-      expect(validatorWithParam(5)('failed')(4)).to.equal('failed')
-      expect(validatorWithParam(5)('failed')(6)).to.equal(null)
-    })
-
-    it('should pass multiple parameters to the function', function () {
-      const validatorWithParam = validatorFromFunction((value, min, max) => value > min && value < max)
-      expect(validatorWithParam(23, 42)('failed')(22)).to.equal('failed')
-      expect(validatorWithParam(23, 42)('failed')(43)).to.equal('failed')
-      expect(validatorWithParam(23, 42)('failed')(30)).to.equal(null)
-    })
-  })
-
-  describe('combine', function () {
-    it('should return the first error', function () {
-      const combinedValidator = combine(length({min: 3})('to-short'), length({min: 5})('to-short-2'))
-      expect(combinedValidator('a')).to.equal('to-short')
-      expect(combinedValidator('abcd')).to.equal('to-short-2')
-    })
-
-    it('should return null if no validator returns an error', function () {
-      const combinedValidator = combine(length({min: 0})('to-short'), length({min: 2})('to-short-2'))
-      expect(combinedValidator('abcd')).to.equal(null)
-    })
-  })
+describe('validators', function () {
+  const ERROR_STRING = '0xDEADBEEF'
 
   describe('number', function () {
     it('should work without any parameters', function () {
-      expect(number()('nan')('23')).to.equal(null)
-      expect(number()('nan')('asd')).to.equal('nan')
+      expect(validators.number()(ERROR_STRING)('23')).to.equal(null)
+      expect(validators.number()(ERROR_STRING)('asd')).to.equal(ERROR_STRING)
     })
 
     it('should work with a min number of zero', function () {
-      expect(number({min: 0})('nan')('23')).to.equal(null)
-      expect(number({min: 0})('nan')('-23')).to.equal('nan')
+      expect(validators.number({min: 0})(ERROR_STRING)('23')).to.equal(null)
+      expect(validators.number({min: 0})(ERROR_STRING)('-23')).to.equal(ERROR_STRING)
     })
 
     it('should work with a max number of zero', function () {
-      expect(number({max: 0})('nan')('23')).to.equal('nan')
-      expect(number({max: 0})('nan')('-23')).to.equal(null)
+      expect(validators.number({max: 0})(ERROR_STRING)('23')).to.equal(ERROR_STRING)
+      expect(validators.number({max: 0})(ERROR_STRING)('-23')).to.equal(null)
     })
 
     it('should work with a max and min number', function () {
-      expect(number({min: 0, max: 12})('nan')('23')).to.equal('nan')
-      expect(number({min: 0, max: 12})('nan')('-23')).to.equal('nan')
-      expect(number({min: 0, max: 12})('nan')('11')).to.equal(null)
+      expect(validators.number({min: 0, max: 12})(ERROR_STRING)('23')).to.equal(ERROR_STRING)
+      expect(validators.number({min: 0, max: 12})(ERROR_STRING)('-23')).to.equal(ERROR_STRING)
+      expect(validators.number({min: 0, max: 12})(ERROR_STRING)('11')).to.equal(null)
     })
 
     it('should report an error for an undefined value', function () {
-      expect(number({min: 0, max: 12})('nan')(undefined)).to.equal('nan')
+      expect(validators.number({min: 0, max: 12})(ERROR_STRING)(undefined)).to.equal(ERROR_STRING)
     })
   })
 
   describe('length', function () {
     it('should throw an exception when used without a parameter', function () {
-      expect(() => length()('err')('')).to.throw('length requires at least one parameter!')
+      expect(() => validators.length()(ERROR_STRING)('')).to.throw('length requires at least one parameter!')
     })
 
     it('should check correctly for minimum length', function () {
-      expect(length({min: 3})('err')('foo')).to.equal(null)
-      expect(length({min: 3})('err')('fo')).to.equal('err')
+      expect(validators.length({min: 3})(ERROR_STRING)('foo')).to.equal(null)
+      expect(validators.length({min: 3})(ERROR_STRING)('fo')).to.equal(ERROR_STRING)
     })
 
     it('should check correctly for maximum length', function () {
-      expect(length({max: 3})('err')('foobar')).to.equal('err')
-      expect(length({max: 3})('err')('foo')).to.equal(null)
+      expect(validators.length({max: 3})(ERROR_STRING)('foobar')).to.equal(ERROR_STRING)
+      expect(validators.length({max: 3})(ERROR_STRING)('foo')).to.equal(null)
     })
 
     it('should report an error for an undefined value', function () {
-      expect(length({max: 3})('err')(undefined)).to.equal('err')
+      expect(validators.length({max: 3})(ERROR_STRING)(undefined)).to.equal(ERROR_STRING)
     })
   })
 
   describe('exists', function () {
     it('should return the error if the value is undefined', function () {
-      expect(exists()('error')(undefined)).to.equal('error')
+      expect(validators.exists()(ERROR_STRING)(undefined)).to.equal(ERROR_STRING)
     })
 
     it('should return null if the value is defined', function () {
-      expect(exists()('error')('something')).to.equal(null)
+      expect(validators.exists()(ERROR_STRING)('something')).to.equal(null)
     })
   })
 
   describe('regex', function () {
     it('should return the error if the regex does not match the value', function () {
-      expect(regex(/[a-z]{3}/)('nomatch')('ab1')).to.equal('nomatch')
+      expect(validators.regex(/[a-z]{3}/)(ERROR_STRING)('ab1')).to.equal(ERROR_STRING)
     })
 
     it('should return null if the regex does match the value', function () {
-      expect(regex(/[a-z]{3}/)('nomatch')('abz')).to.equal(null)
+      expect(validators.regex(/[a-z]{3}/)(ERROR_STRING)('abz')).to.equal(null)
     })
 
     it('should report an error for an undefined value', function () {
-      expect(regex(/[a-z]{3}/)('nomatch')(undefined)).to.equal('nomatch')
-    })
-  })
-
-  describe('array', function () {
-    it('should apply the given validation to all elements', function () {
-      const result = array({ foo: () => 'err'})([{}, {}])
-      expect(result).to.be.a('array')
-      expect(result).to.have.deep.property('[0].foo', 'err')
-      expect(result).to.have.deep.property('[1].foo', 'err')
-    })
-
-    it('should allow to specify a minimum amount of elements', function () {
-      const result = array({ foo: () => 'err'}, {min: 2})([])
-      expect(result).to.be.a('array')
-      expect(result).to.have.deep.property('[0].foo', 'err')
-      expect(result).to.have.deep.property('[1].foo', 'err')
-    })
-
-    it('should work when the value is undefined', function () {
-      const result = array({ foo: () => 'err'}, {min: 1})(undefined)
-      expect(result).to.have.deep.property('[0].foo', 'err')
+      expect(validators.regex(/[a-z]{3}/)(ERROR_STRING)(undefined)).to.equal(ERROR_STRING)
     })
   })
 
   describe('equals', function () {
     it('should work with booleans', function () {
-      expect(equals(true)('not true')(false)).to.equal('not true')
-      expect(equals(true)('not true')(true)).to.equal(null)
+      expect(validators.equals(true)(ERROR_STRING)(false)).to.equal(ERROR_STRING)
+      expect(validators.equals(true)(ERROR_STRING)(true)).to.equal(null)
     })
 
     it('should work with strings', function () {
-      expect(equals('star wars')('not true')('star trek')).to.equal('not true')
-      expect(equals('star wars')('not true')('star wars')).to.equal(null)
+      expect(validators.equals('star wars')(ERROR_STRING)('star trek')).to.equal(ERROR_STRING)
+      expect(validators.equals('star wars')(ERROR_STRING)('star wars')).to.equal(null)
     })
 
     it('should strictly compare values', function () {
-      expect(equals(true)('not true')('true')).to.equal('not true')
-      expect(equals(23)('not 23')('23')).to.equal('not 23')
+      expect(validators.equals(true)(ERROR_STRING)('true')).to.equal(ERROR_STRING)
+      expect(validators.equals(23)(ERROR_STRING)('23')).to.equal(ERROR_STRING)
     })
 
     it('should work when the value is undefined', function () {
-      expect(equals(true)('not true')(undefined)).to.equal('not true')
+      expect(validators.equals(true)(ERROR_STRING)(undefined)).to.equal(ERROR_STRING)
     })
   })
 })
