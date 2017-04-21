@@ -1,5 +1,6 @@
 # validate-redux-form
 [![Build Status](https://travis-ci.org/Malax/validate-redux-form.svg?branch=develop)](https://travis-ci.org/Malax/validate-redux-form)
+[![codecov.io](https://codecov.io/gh/Malax/validate-redux-form/branch/develop/graph/badge.svg)](https://codecov.io/gh/malax/validate-redux-form)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 Small helper library to write declarative validations for [redux-form](https://github.com/erikras/redux-form) forms.
