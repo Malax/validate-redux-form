@@ -41,7 +41,8 @@ export const number = validatorFromFunction((value, {minValue, maxValue} = {}) =
 
 export const regex = validatorFromFunction((value, pattern) => value.match(pattern) !== null)
 
-export const array = (validationSpec, {min = 0} = {}) => (value) => {
+export const array = (validationSpec, {min = 0} = {}) => (valueOrUndefined) => {
+  const value = valueOrUndefined || []
   const normalizedValue = value.concat(new Array(Math.max(0, min - value.length)).fill({}))
   return normalizedValue.map(v => validate(v, validationSpec))
 }

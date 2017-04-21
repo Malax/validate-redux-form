@@ -119,5 +119,10 @@ describe('Validators', function () {
       expect(result).to.have.deep.property('[0].foo', 'err')
       expect(result).to.have.deep.property('[1].foo', 'err')
     })
+
+    it('should work when the value is undefined', function () {
+      const result = array({ foo: () => 'err'}, {min: 1})(undefined)
+      expect(result).to.have.deep.property('[0].foo', 'err')
+    })
   })
 })
