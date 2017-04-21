@@ -1,6 +1,7 @@
 # validate-redux-form
 [![Build Status](https://travis-ci.org/Malax/validate-redux-form.svg?branch=master)](https://travis-ci.org/Malax/validate-redux-form)
-:warning: **This library is under heavy in development! Please, don't use it yet.**
+
+:warning: **This library is under heavy in development! Please, don't use it yet.** :warning:
 
 Small helper library to write declarative validations for [redux-form](https://github.com/erikras/redux-form) forms.
 It is designed to be used with redux-form and might not be very well suited to be 
@@ -132,18 +133,18 @@ const validationSpec = {
 Checks for strict equality of the given value to the actual value in the form. It takes the
 value to compare the actual form value with as it's parameter.
 
-:warning: **Please remember that *redux-form* keeps all field values as strings or booleans!**
-
 ```javascript
 {
   movie: validators.equals('Star Wars')('This field must contain Star Wars!')
 }
 ```
 
+:warning: **Please remember that *redux-form* keeps all field values as strings or booleans!**
+
 ### exists
 Checks if the value is not `undefined`. This validator is useful if you only want to
 check if there is a value and do not care about the value itself. As most other validators
-fail in the case of `undefined` anyway, so you usually don't need to `combine()` this validator
+fail in the case of `undefined` anyway, you usually don't need to [combine()](#combining-validators) this validator
 with other validators.
 
 ```javascript
