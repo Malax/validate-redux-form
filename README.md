@@ -127,6 +127,32 @@ const validationSpec = {
 }
 ```
 
+### Validating Arrays
+If you're having arrays in your forms, you need a way to validate their contents. To do this, just wrap another
+validation inside an array. 
+
+```javascript
+{
+  members: [{
+    firstName: validators.length({min: 0})('Enter a first name'),
+    lastName: validators.length({min: 0})('Enter a last name')
+  }]
+}
+```
+
+This will validate all entries with the given validation. If you need to validate that a minimum
+amount of entries is present and valid, you need to use a slightly different syntax:
+
+```javascript
+import { array } from 'validate-redux-form'
+{
+  members: array({
+    firstName: validators.length({min: 0})('Enter a first name'),
+    lastName: validators.length({min: 0})('Enter a last name')
+  }, 2)
+}
+```
+
 ## Built-In Validators
  
 ### equals

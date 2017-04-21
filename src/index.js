@@ -3,6 +3,7 @@ import fromPairs from 'lodash.frompairs'
 import isFunction from 'lodash.isfunction'
 import isObject from 'lodash.isobject'
 import isEmpty from 'lodash.isempty'
+import isArray from 'lodash.isarray'
 import importedValidators from './validators'
 
 export const validators = importedValidators
@@ -12,7 +13,11 @@ export function validate (data, validationSpec) {
 
   const errorPairs = pairs.reduce((acc, pair) => {
     const key = pair[0]
-    const value = pair[1]
+    let value = pair[1]
+
+    if (isArray(value)) {
+      value = validators.array(value[0])
+    }
 
     if (isFunction(value)) {
       const validationResult = value(data[key])

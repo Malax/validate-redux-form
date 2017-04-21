@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { validate } from '../src/index'
+import { validate, validators } from '../src/index'
 
 describe('validate-redux-form', function () {
   describe('validate', function () {
@@ -72,6 +72,29 @@ describe('validate-redux-form', function () {
       }
 
       expect(validate({}, validation)).to.deep.equal({foo: [{bar: 'baz'}, {bar: 'baz'}, {bar: 'baz'}]})
+    })
+
+    it('should work with embedded arrays', function () {
+      const validation = {
+        members: [{
+          firstName: validators.length({min: 1})('Enter a first name'),
+          lastName: validators.length({min: 1})('Enter a last name')
+        }]
+      }
+
+      const formData = {
+        members: [
+          { firstName: 'first', lastName: 'last' },
+          { firstName: 'first', lastName: '' }
+        ]
+      }
+
+      expect(validate(formData, validation)).to.deep.equal({
+        members: [
+          {},
+          { lastName: 'Enter a last name' }
+        ]
+      })
     })
   })
 })
