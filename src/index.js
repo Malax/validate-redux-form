@@ -38,7 +38,7 @@ export function validate (data, validationSpec) {
       }
     }
 
-    return acc
+    throw new Error('Unsupported validator ' + value)
   }, [])
 
   return fromPairs(errorPairs)

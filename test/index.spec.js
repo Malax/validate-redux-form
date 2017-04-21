@@ -95,4 +95,8 @@ describe('validate', function () {
       ]
     })
   })
+
+  it('should warn if the validation spec has an unsupported value', function () {
+    expect(() => validate({}, {foo: 1138})).to.throw('Unsupported validator 1138')
+  })
 })
