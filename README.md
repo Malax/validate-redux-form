@@ -6,6 +6,9 @@ It is designed to be used with redux-form and might not be very well suited to b
 used without it. If you need a more generic solution to validate javascript objects,
 take a look at [validate.js](https://github.com/ansman/validate.js).
 
+## Installation
+`npm install validate-redux-form`
+
 ## Table of Contents
 * [Quick Start](#quick-start)
 * [Validators](#validators)
