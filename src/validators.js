@@ -1,9 +1,15 @@
 import { validate } from './index'
 
-export const validatorFromFunction = (validationFunction) => {
+export const validatorFromFunction = (validationFunction, undefinedIsError) => {
   return function (params) {
     const argumentsAsArray = [].slice.apply(arguments)
-    return (message) => (value) => validationFunction.apply(this, [value, ...argumentsAsArray]) ? null : message
+    return (message) => (value) => {
+      if (undefinedIsError && value === undefined) {
+        return message
+      }
+
+      return validationFunction.apply(this, [value, ...argumentsAsArray]) ? null : message
+    }
   }
 }
 
@@ -30,16 +36,16 @@ export const length = validatorFromFunction((string, {min, max} = {}) => {
   const hasMinLength = min !== undefined ? string.length >= min : true
   const hasMaxLength = max !== undefined ? string.length <= max : true
   return hasMinLength && hasMaxLength
-})
+}, true)
 
 export const number = validatorFromFunction((value, {minValue, maxValue} = {}) => {
   const isNumber = !isNaN(value)
   const hasMinValue = minValue !== undefined ? parseInt(value) >= minValue : true
   const hasMaxValue = maxValue !== undefined ? parseInt(value) <= maxValue : true
   return isNumber && hasMinValue && hasMaxValue
-})
+}, true)
 
-export const regex = validatorFromFunction((value, pattern) => value.match(pattern) !== null)
+export const regex = validatorFromFunction((value, pattern) => value.match(pattern) !== null, true)
 
 export const array = (validationSpec, {min = 0} = {}) => (valueOrUndefined) => {
   const value = valueOrUndefined || []

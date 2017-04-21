@@ -67,6 +67,10 @@ describe('Validators', function () {
       expect(number({minValue: 0, maxValue: 12})('nan')('-23')).to.equal('nan')
       expect(number({minValue: 0, maxValue: 12})('nan')('11')).to.equal(null)
     })
+
+    it('should report an error for an undefined value', function () {
+      expect(number({minValue: 0, maxValue: 12})('nan')(undefined)).to.equal('nan')
+    })
   })
 
   describe('length', function () {
@@ -82,6 +86,10 @@ describe('Validators', function () {
     it('should check correctly for maximum length', function () {
       expect(length({max: 3})('err')('foobar')).to.equal('err')
       expect(length({max: 3})('err')('foo')).to.equal(null)
+    })
+
+    it('should report an error for an undefined value', function () {
+      expect(length({max: 3})('err')(undefined)).to.equal('err')
     })
   })
 
@@ -102,6 +110,10 @@ describe('Validators', function () {
 
     it('should return null if the regex does match the value', function () {
       expect(regex(/[a-z]{3}/)('nomatch')('abz')).to.equal(null)
+    })
+
+    it('should report an error for an undefined value', function () {
+      expect(regex(/[a-z]{3}/)('nomatch')(undefined)).to.equal('nomatch')
     })
   })
 
