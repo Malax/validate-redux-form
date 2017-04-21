@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { validatorFromFunction, combine, exists, length, number, regex, array } from '../src/validators'
+import { validatorFromFunction, combine, exists, length, number, regex, array, equals } from '../src/validators'
 
 describe('Validators', function () {
   describe('validatorFromFunction', function () {
@@ -135,6 +135,27 @@ describe('Validators', function () {
     it('should work when the value is undefined', function () {
       const result = array({ foo: () => 'err'}, {min: 1})(undefined)
       expect(result).to.have.deep.property('[0].foo', 'err')
+    })
+  })
+
+  describe('equals', function () {
+    it('should work with booleans', function () {
+      expect(equals(true)('not true')(false)).to.equal('not true')
+      expect(equals(true)('not true')(true)).to.equal(null)
+    })
+
+    it('should work with strings', function () {
+      expect(equals('star wars')('not true')('star trek')).to.equal('not true')
+      expect(equals('star wars')('not true')('star wars')).to.equal(null)
+    })
+
+    it('should strictly compare values', function () {
+      expect(equals(true)('not true')('true')).to.equal('not true')
+      expect(equals(23)('not 23')('23')).to.equal('not 23')
+    })
+
+    it('should work when the value is undefined', function () {
+      expect(equals(true)('not true')(undefined)).to.equal('not true')
     })
   })
 })

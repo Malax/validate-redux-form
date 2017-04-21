@@ -53,6 +53,8 @@ export const array = (validationSpec, {min = 0} = {}) => (valueOrUndefined) => {
   return normalizedValue.map(v => validate(v, validationSpec))
 }
 
+export const equals = validatorFromFunction((value, expectedValue) => value === expectedValue, false)
+
 export default {
   validatorFromFunction,
   combine,
@@ -60,5 +62,6 @@ export default {
   length,
   number,
   regex,
-  array
+  array,
+  equals
 }
