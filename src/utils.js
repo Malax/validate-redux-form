@@ -33,3 +33,13 @@ export function validatorFromFunction (validationFunction, undefinedIsError) {
     }
   }
 }
+
+export function optional (inner) {
+  return (value) => {
+    if (value === undefined) {
+      return null
+    }
+
+    return inner(value)
+  }
+}

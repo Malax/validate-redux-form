@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { validators, validatorFromFunction, array, combine } from '../src/index'
+import { validators, validatorFromFunction, array, combine, optional } from '../src/index'
 
 describe('utils', function () {
   describe('validatorFromFunction', function () {
@@ -51,6 +51,16 @@ describe('utils', function () {
       )
 
       expect(combinedValidator('abcd')).to.equal(null)
+    })
+  })
+
+  describe('optional', function () {
+    it('should not call the inner validator if the value is undefined', function () {
+      expect(optional(validators.length({min: 3})('X'))(undefined)).to.equal(null)
+    })
+
+    it('should call the inner validator if the value is defined', function () {
+      expect(optional(validators.length({min: 3})('X'))('fo')).to.equal('X')
     })
   })
 

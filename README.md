@@ -20,11 +20,12 @@ If you just want to dive right in, take a look at some examples. They probably c
  all the information you need to use this library.
 
 ```javascript
-import { validate, validators } from 'validate-redux-form'
+import { validate, validators, optional } from 'validate-redux-form'
 
 validate(dataFromReduxForm, {
   episodeNumber: validators.number()('Must be a number!'),
   description: validators.length({min: 1, max: 50})('Length must be between 1 and 50!'),
+  title: optional(validators.length({min: 5})('If you specify a title, is must have a minimum length of 5!')),
   details: {
     nestedProperty: validators.exists()('Required!'),
     anotherNestedProperty: validators.exists()('Required!')
@@ -125,6 +126,16 @@ In some cases, you might want to have two (or more) validators for a field. *val
 import { combine } from 'validate-redux-form'
 const validationSpec = {
   field: combine(validator1()('error 1'), validator2()('error 2'))
+}
+```
+
+### Optional Validators
+When you only want to validate a value if it's defined you can wrap the validator in `optional`.
+
+```javascript
+import { optional } from 'validate-redux-form'
+const validationSpec = {
+  field: optional(validator()('Error'))
 }
 ```
 

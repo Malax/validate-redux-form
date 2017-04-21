@@ -6,7 +6,7 @@ import isEmpty from 'lodash.isempty'
 import { array } from './utils'
 
 export { default as validators } from './validators'
-export { array, validatorFromFunction, combine } from './utils'
+export { array, validatorFromFunction, combine, optional } from './utils'
 
 export function validate (data, validationSpec) {
   const pairs = toPairs(validationSpec)
