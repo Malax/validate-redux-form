@@ -1,8 +1,6 @@
 # validate-redux-form
 [![Build Status](https://travis-ci.org/Malax/validate-redux-form.svg?branch=master)](https://travis-ci.org/Malax/validate-redux-form)
 
-:warning: **This library is under heavy in development! Please, don't use it yet.** :warning:
-
 Small helper library to write declarative validations for [redux-form](https://github.com/erikras/redux-form) forms.
 It is designed to be used with redux-form and might not be very well suited to be 
 used without it. If you need a more generic solution to validate javascript objects,
@@ -20,44 +18,53 @@ If you just want to dive right in, take a look at some examples. They probably c
  all the information you need to use this library.
 
 ```javascript
+import { reduxForm } from 'redux-form'
 import { validate, validators, optional } from 'validate-redux-form'
 
-validate(dataFromReduxForm, {
-  episodeNumber: validators.number()('Must be a number!'),
-  description: validators.length({min: 1, max: 50})('Length must be between 1 and 50!'),
-  title: optional(validators.length({min: 5})('If you specify a title, is must have a minimum length of 5!')),
-  details: {
-    nestedProperty: validators.exists()('Required!'),
-    anotherNestedProperty: validators.exists()('Required!')
-  },
-  users: [{
-    name: validators.length({min: 1})('You must give a name!'),
-    age: validators.number({min: 1, max: 100})('Must be a valid age!')
-  }]
-})
+reduxForm({
+  form: 'example',
+  validate: (data) => {
+    return validate(data, {
+      episodeNumber: validators.number()('Must be a number!'),
+      description: validators.length({min: 1, max: 50})('Length must be between 1 and 50!'),
+      title: optional(validators.length({min: 5})('If you specify a title, is must have a minimum length of 5!')),
+      details: {
+        nestedProperty: validators.exists()('Required!'),
+        anotherNestedProperty: validators.exists()('Required!')
+      },
+      users: [{
+        name: validators.length({min: 1})('You must give a name!'),
+        age: validators.number({min: 1, max: 100})('Must be a valid age!')
+      }]
+    })
+  }
+})(MyForm)
 ```
 
-If you pass in an empty object as the first parameter to `validate` you would get the following
-result.
+If you would pass in an empty object as the first parameter to `validate` you would get the following
+result:
 
 ```javascript
-const result = {
+{
   episodeNumber: 'Must be a number!',
   description: 'Length must be between 1 and 50!',
+  // "title" is missing here, because it is optional
   details: {
     nestedProperty: 'Required!',
     anotherNestedProperty: 'Required!'
   },
-  // Empty as there where no entries in the given data. You can also instruct the `array` validator
-  // to expect a minimum amount of elements. See 'Validating Arrays' for more info.
+  // Empty, as there where no entries in the given data. You can also force arrays to have
+  // a minimum amount of elements. See 'Validating Arrays' for more info.
   users: []
 }
 ```
 
 Let's take a look at another example where we actually pass some data into `validate` and see how it behaves.
+We use the same validation specification as in the last example.
 
+This input:
 ```javascript
-const input = {
+{
   episodeNumber: '23',
   description: 'foo',
   users: [
@@ -66,10 +73,11 @@ const input = {
     {name: 'Darth Vader'},
   ]
 }
+```
 
-// ...call validate as in the first example
-
-const result = {
+Results in: 
+```javascript
+{
   details: {
     nestedProperty: 'Required!',
     anotherNestedProperty: 'Required!'
@@ -103,7 +111,7 @@ import { validatorFromFunction } from 'validate-redux-form'
 const random = validatorFromFunction(value => Math.random() < 0.5)
 
 // It can then be used like any other built-in validator
-const validationSpec = {
+{
   fieldName: random()('Bad luck, it failed this time.')
 }
 ```
@@ -113,7 +121,8 @@ can have any many parameters as you like.
 
 ```javascript
 const random = validatorFromFunction((value, chanceToFail) => Math.random() < chanceToFail)
-const validationSpec = {
+
+{
   fieldName: random(.05)('1 out of 20 chance to fail!')
 }
 ```
@@ -123,9 +132,13 @@ In some cases, you might want to have two (or more) validators for a field. *val
 `combine()` that does exactly that.
 
 ```javascript
-import { combine } from 'validate-redux-form'
-const validationSpec = {
-  field: combine(validator1()('error 1'), validator2()('error 2'))
+import { combine, validators } from 'validate-redux-form'
+
+{
+  field: combine(
+    validators.number()('Must be a number'), 
+    validators.length({min: 3})('Must have three digits')
+  )
 }
 ```
 
@@ -133,9 +146,10 @@ const validationSpec = {
 When you only want to validate a value if it's defined you can wrap the validator in `optional`.
 
 ```javascript
-import { optional } from 'validate-redux-form'
-const validationSpec = {
-  field: optional(validator()('Error'))
+import { optional, validators } from 'validate-redux-form'
+
+{
+  field: optional(validators.number()('Error'))
 }
 ```
 
@@ -157,6 +171,7 @@ amount of entries is present and valid, you need to use a slightly different syn
 
 ```javascript
 import { array } from 'validate-redux-form'
+
 {
   members: array({
     firstName: validators.length({min: 0})('Enter a first name'),
