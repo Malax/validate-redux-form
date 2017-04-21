@@ -6,12 +6,19 @@ It is designed to be used with redux-form and might not be very well suited to b
 used without it. If you need a more generic solution to validate javascript objects,
 take a look at [validate.js](https://github.com/ansman/validate.js).
 
-## TOC
+## Table of Contents
 * [Quick Start](#quick-start)
+* [Validators](#validators)
+    * [Writing custom validators](#writing-custom-validators)
+    * [Combining Validators](#combining-validators)
+    * [Optional Validators](#optional-validators)
+    * [Validating Arrays](#validating-arrays)
 * [Built-In Validators](#built-in-validators)
-* [Combining Validators](#combining-validators)
-* [Validating Arrays](#validating-arrays)
-* [Writing custom validators](#writing-custom-validators)
+    * [equals](#equals)
+    * [exists](#exists)
+    * [length](#length)
+    * [regex](#regex)
+    * [number](#number)
 
 ## Quick Start
 If you just want to dive right in, take a look at some examples. They probably contain
