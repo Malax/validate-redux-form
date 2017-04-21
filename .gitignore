@@ -1,3 +1,5 @@
 /node_modules
 /.idea
 /compiled
+/.nyc_output
+/coverage
