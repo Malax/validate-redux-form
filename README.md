@@ -136,7 +136,7 @@ const random = validatorFromFunction((value, chanceToFail) => Math.random() < ch
 
 ### Combining Validators
 In some cases, you might want to have two (or more) validators for a field. *validate-redux-form* provides you with
-`combine()` that does exactly that.
+`combine` that does exactly that.
 
 ```javascript
 import { combine, validators } from 'validate-redux-form'
