@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { validatorFromFunction, combine, exists, length, number, regex } from '../src/validators'
+import { validatorFromFunction, combine, exists, length, number, regex, array } from '../src/validators'
 
 describe('Validators', function () {
   describe('validatorFromFunction', function () {
@@ -102,6 +102,22 @@ describe('Validators', function () {
 
     it('should return null if the regex does match the value', function () {
       expect(regex(/[a-z]{3}/)('nomatch')('abz')).to.equal(null)
+    })
+  })
+
+  describe('array', function () {
+    it('should apply the given validation to all elements', function () {
+      const result = array({ foo: () => 'err'})([{}, {}])
+      expect(result).to.be.a('array')
+      expect(result).to.have.deep.property('[0].foo', 'err')
+      expect(result).to.have.deep.property('[1].foo', 'err')
+    })
+
+    it('should allow to specify a minimum amount of elements', function () {
+      const result = array({ foo: () => 'err'}, {min: 2})([])
+      expect(result).to.be.a('array')
+      expect(result).to.have.deep.property('[0].foo', 'err')
+      expect(result).to.have.deep.property('[1].foo', 'err')
     })
   })
 })

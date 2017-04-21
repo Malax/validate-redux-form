@@ -65,5 +65,13 @@ describe('validate-redux-form', function () {
 
       expect(validate({}, validation)).to.have.deep.property('foo.bar.baz.qoo.quu.test', 'failed')
     })
+
+    it('should work with validators that return arrays', function () {
+      const validation = {
+        foo: (value) => [{bar: 'baz'}, {bar: 'baz'}, {bar: 'baz'}]
+      }
+
+      expect(validate({}, validation)).to.deep.equal({foo: [{bar: 'baz'}, {bar: 'baz'}, {bar: 'baz'}]})
+    })
   })
 })

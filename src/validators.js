@@ -1,3 +1,5 @@
+import { validate } from './index'
+
 export const validatorFromFunction = (validationFunction) => {
   return function (params) {
     const argumentsAsArray = [].slice.apply(arguments)
@@ -39,11 +41,17 @@ export const number = validatorFromFunction((value, {minValue, maxValue} = {}) =
 
 export const regex = validatorFromFunction((value, pattern) => value.match(pattern) !== null)
 
+export const array = (validationSpec, {min = 0} = {}) => (value) => {
+  const normalizedValue = value.concat(new Array(Math.max(0, min - value.length)).fill({}))
+  return normalizedValue.map(v => validate(v, validationSpec))
+}
+
 export default {
   validatorFromFunction,
   combine,
   exists,
   length,
   number,
-  regex
+  regex,
+  array
 }
