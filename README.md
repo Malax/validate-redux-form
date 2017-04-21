@@ -12,6 +12,7 @@ take a look at [validate.js](https://github.com/ansman/validate.js).
 * [Quick Start](#quick-start)
 * [Built-In Validators](#built-in-validators)
 * [Combining Validators](#combining-validators)
+* [Validating Arrays](#validating-arrays)
 * [Writing custom validators](#writing-custom-validators)
 
 ## Quick Start
@@ -28,10 +29,10 @@ validate(dataFromReduxForm, {
     nestedProperty: validators.exists()('Required!'),
     anotherNestedProperty: validators.exists()('Required!')
   },
-  users: validators.array({
+  users: [{
     name: validators.length({min: 1})('You must give a name!'),
     age: validators.number({min: 1, max: 100})('Must be a valid age!')
-  })
+  }]
 })
 ```
 
@@ -47,7 +48,7 @@ const result = {
     anotherNestedProperty: 'Required!'
   },
   // Empty as there where no entries in the given data. You can also instruct the `array` validator
-  // to expect a minimum amount of elements. See the validator documentation for more info.
+  // to expect a minimum amount of elements. See 'Validating Arrays' for more info.
   users: []
 }
 ```
